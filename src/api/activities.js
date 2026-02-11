@@ -6,9 +6,27 @@ export async function getActivities() {
     const response = await fetch(API + "/activities");
     const result = await response.json();
     return result;
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error("Failed to get Activities", error);
     return [];
+  }
+}
+
+export async function deleteActivity(token, id) {
+  if (!token) {
+    throw Error("You must be signed in to delete an activity");
+  }
+
+  const response = await fetch(API + `/activities/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  if (!response.ok) {
+    const result = await response.json();
+    throw Error(result.message); // 401 Unauthorized / 403 Forbidden
   }
 }
 
