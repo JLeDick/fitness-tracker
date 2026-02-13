@@ -30,7 +30,7 @@ export default function ActivityDetailsPage() {
   }, [id]);
 
   if (!activity) {
-    return <p>Loading...</p>;
+    return <h3>Loading...</h3>;
   }
 
   return (
