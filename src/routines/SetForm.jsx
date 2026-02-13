@@ -29,11 +29,12 @@ export default function SetForm({ syncRoutines, routine }) {
     }
   };
 
-  const tryDeleteSet = async () => {
+  const tryDeleteSet = async (setId) => {
     setError(null);
 
     try {
-      await deleteSet(token, routine.sets.id);
+      await deleteSet(token, setId);
+      syncRoutines();
     } catch (error) {
       setError(error.message);
     }
@@ -59,7 +60,11 @@ export default function SetForm({ syncRoutines, routine }) {
             {routine.sets.map((set) => (
               <li key={set.id}>
                 {set.name} x {set.count}
-                {token && <button onClick={tryDeleteSet}>Delete Set</button>}
+                {token && (
+                  <button type="button" onClick={() => tryDeleteSet(set.id)}>
+                    Delete Set
+                  </button>
+                )}
               </li>
             ))}
           </ul>
