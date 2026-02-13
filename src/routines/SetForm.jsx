@@ -17,15 +17,15 @@ export default function SetForm({ syncRoutines, routine }) {
   const tryCreateSet = async (formData) => {
     setError(null);
 
-    const activityID = formData.get("activityID");
+    const activityId = formData.get("activityId");
     const count = formData.get("count");
-    const routineID = formData.get("routineID");
 
+    // I'm sorry what the fuck - How was I supposed to figure out routineID: routine.id on my own?
     try {
-      await createSet(token, { activityID, count, routineID });
+      await createSet(token, { activityId, count, routineId: routine.id });
       syncRoutines();
     } catch (error) {
-      console.error(error.message);
+      setError(error.message);
     }
   };
 
@@ -41,7 +41,7 @@ export default function SetForm({ syncRoutines, routine }) {
   return (
     <>
       <h5>Sets</h5>
-      <form action="tryCreateSet">
+      <form action={tryCreateSet}>
         {routine.sets.length === 0 ? (
           <p>No sets yet! Add one below.</p>
         ) : (
@@ -53,20 +53,20 @@ export default function SetForm({ syncRoutines, routine }) {
             ))}
           </ul>
         )}
+        <h3>Add a Set</h3>
+        <p>Activity</p>
+        <select name="activityId">
+          {activities.map((activity) => (
+            <option key={activity.id} value={activity.id}>
+              {activity.name}
+            </option>
+          ))}
+        </select>
+        <p>Count</p>
+        <input type="number" name="count" />
+        {token && <button onClick={tryCreateSet}>Add Set</button>}
+        {error && <p role="alert">{error}</p>}
       </form>
-      <h3>Add a Set</h3>
-      <p>Activity</p>
-      <select name="activityID">
-        {activities.map((activity) => (
-          <option key={activity.id} value={activity.id}>
-            {activity.name};
-          </option>
-        ))}
-      </select>
-      <p>Count</p>
-      <input type="number" name="count" />
-      {token && <button onClick={tryCreateSet}>Add Set</button>}
-      {error && <p role="alert">{error}</p>}
     </>
   );
 }
