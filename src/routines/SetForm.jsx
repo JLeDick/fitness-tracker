@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createSet } from "../api/routines";
+import { createSet, deleteSet } from "../api/routines";
 import { useAuth } from "../auth/AuthContext";
 import { getActivities } from "../api/activities";
 
@@ -29,6 +29,16 @@ export default function SetForm({ syncRoutines, routine }) {
     }
   };
 
+  const tryDeleteSet = async () => {
+    setError(null);
+
+    try {
+      await deleteSet(token, routine.sets.id);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   // Fetch activities on mount to populate the dropdown menu below
   useEffect(() => {
     async function fetchActivities() {
@@ -49,6 +59,7 @@ export default function SetForm({ syncRoutines, routine }) {
             {routine.sets.map((set) => (
               <li key={set.id}>
                 {set.name} x {set.count}
+                {token && <button onClick={tryDeleteSet}>Delete Set</button>}
               </li>
             ))}
           </ul>
