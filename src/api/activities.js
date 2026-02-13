@@ -26,7 +26,7 @@ export async function deleteActivity(token, id) {
 
   if (!response.ok) {
     const result = await response.json();
-    throw Error(result.message); // 401 Unauthorized / 403 Forbidden
+    throw Error(result.message); // 401 Unauthorized / 403 Forbidden / >Check Network Tab<
   }
 }
 
