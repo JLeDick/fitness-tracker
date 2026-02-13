@@ -12,6 +12,16 @@ export async function getActivities() {
   }
 }
 
+export async function getActivity(id) {
+  try {
+    const response = await fetch(API + `/activities/${id}`);
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Failed to get activity by ID", error);
+  }
+}
+
 export async function deleteActivity(token, id) {
   if (!token) {
     throw Error("You must be signed in to delete an activity");
